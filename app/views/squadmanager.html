@@ -2,74 +2,74 @@
 
 <!-- faction selector -->
 <div class="btn-group">
-    <label class="btn btn-primary" data-ng-model="faction" btn-radio="'Rebel Alliance'">{{ 'UI.Rebel Alliance' | translate }}</label>
-    <label class="btn btn-primary" data-ng-model="faction" btn-radio="'Galactic Empire'">{{ 'UI.Galactic Empire' | translate }}</label>
-    <label class="btn btn-primary" data-ng-model="faction" btn-radio="'Scum and Villainy'">{{ 'UI.Scum and Villainy' | translate }}</label>
+  <label class="btn btn-primary" data-ng-model="faction" btn-radio="'Rebel Alliance'">{{ 'UI.Rebel Alliance' | translate }}</label>
+  <label class="btn btn-primary" data-ng-model="faction" btn-radio="'Galactic Empire'">{{ 'UI.Galactic Empire' | translate }}</label>
+  <label class="btn btn-primary" data-ng-model="faction" btn-radio="'Scum and Villainy'">{{ 'UI.Scum and Villainy' | translate }}</label>
 </div>
 
 <hr/>
 
 <!-- ship selector -->
 <div class="row">
-    <div class="col-sm-10">
-        <ui-select ng-model="s.selected" theme="bootstrap">
-            <ui-select-match placeholder="Select or search a ship in the list...">{{$select.selected.name}}</ui-select-match>
-            <ui-select-choices repeat="ship in cards.ships | listfilter:faction | filter:$select.search">
-                <div ng-bind-html="ship.name | highlight: $select.search"></div>
-                <ul class="list-inline">
-                    <li data-ng-repeat="a in ship.actions track by $index" class="icon-list">
-                        <i class="xwing-font" ng-class="{
-                                                'xwing-font-boost': a === 'Boost',
-                                                'xwing-font-focus': a === 'Focus',
-                                                'xwing-font-evade': a === 'Evade',
-                                                'xwing-font-reinforce': a === 'Reinforce',
-                                                'xwing-font-targetlock': a === 'Target Lock',
-                                                'xwing-font-recover': a === 'Recover',
-                                                'xwing-font-coordinate': a === 'Coordinate',
-                                                'xwing-font-jam': a === 'Jam',
-                                                'xwing-font-barrelroll': a === 'Barrel Roll',
-                                }" alt="{{a}}" title="{{a}}"></i>
-                    </li>
-                </ul>
-            </ui-select-choices>
-        </ui-select>
-    </div>
-    <div class="col-sm-2">
-        <button class="btn btn-success pull-right" ng-click="addToCollection(s.selected)">Add to squad</button>
-    </div>
+  <div class="col-sm-10">
+    <ui-select ng-model="s.selected" theme="bootstrap">
+      <ui-select-match placeholder="Select or search a ship in the list...">{{$select.selected.name}}</ui-select-match>
+      <ui-select-choices repeat="ship in cards.ships | listfilter:faction | filter:$select.search">
+        <div ng-bind-html="ship.name | highlight: $select.search"></div>
+        <ul class="list-inline">
+          <li data-ng-repeat="a in ship.actions track by $index" class="icon-list">
+            <i class="xwing-font" ng-class="{
+                                    'xwing-font-boost': a === 'Boost',
+                                    'xwing-font-focus': a === 'Focus',
+                                    'xwing-font-evade': a === 'Evade',
+                                    'xwing-font-reinforce': a === 'Reinforce',
+                                    'xwing-font-targetlock': a === 'Target Lock',
+                                    'xwing-font-recover': a === 'Recover',
+                                    'xwing-font-coordinate': a === 'Coordinate',
+                                    'xwing-font-jam': a === 'Jam',
+                                    'xwing-font-barrelroll': a === 'Barrel Roll',
+                    }" alt="{{a}}" title="{{a}}"></i>
+          </li>
+        </ul>
+      </ui-select-choices>
+    </ui-select>
+  </div>
+  <div class="col-sm-2">
+    <button class="btn btn-success pull-right" ng-click="addToCollection(s.selected)">Add to squad</button>
+  </div>
 </div>
 
 <hr/>
 
 <!-- selected ships -->
 <div data-ng-show="ships.selected[0]" class="row">
-    <div class="col-sm-1">
-        <strong data-ng-class="{'text-danger': squadTotal > 100}">{{ squadTotal }} / 100</strong>
-    </div>
-    <div class="col-sm-11">
-        <progress class="progress-striped"><bar ng-repeat="bar in pointsTotal track by $index" value="bar.value" type="{{bar.type}}"><span data-ng-hide="bar.value < 5">{{bar.ship}} ({{bar.value}})</span></bar></progress>
-    </div>
+<div class="col-sm-1">
+  <strong data-ng-class="{'text-danger': squadTotal > 100}">{{ squadTotal }} / 100</strong>
+</div>
+<div class="col-sm-11">
+  <progress class="progress-striped"><bar ng-repeat="bar in pointsTotal track by $index" value="bar.value" type="{{bar.type}}"><span data-ng-hide="bar.value < 5">{{bar.ship}} ({{bar.value}})</span></bar></progress>
+</div>
 
-    <div class="col-sm-12 col-md-6" data-ng-repeat="ship in ships.selected track by $index" data-ng-controller="SquadCtrl">
-    <div class="panel panel-default box-shadow">
-        <div class="panel-heading" style="color: #f5f5f5; background: #333 url(images/data/pilots/{{ ship.pilot.id }}.png) no-repeat right">
-            <h4>{{ ship.name }} <small>Points: {{ ship.points }}</small>
-                <button data-ng-click="ships.selected.splice($index,1)" class="btn btn-sm btn-danger pull-right" data-tooltip="remove ship from current squad"><i class="fa fa-remove"></i></button>
-                <button data-ng-click="duplicateShip(ship)" class="btn btn-sm btn-primary pull-right" data-tooltip="duplicate ship"><i class="fa fa-copy"></i></button>
-            </h4>
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="box-callout-warning box-callout">
-                        <ui-select ng-model="ship.pilot" on-select="changePilot($item, $model)">
-                            <ui-select-match placeholder="Select or search a pilot for {{ship.name}}">{{$select.selected.name}} - ({{$select.selected.points}})</ui-select-match>
-                            <ui-select-choices repeat="pilot in cards.pilotsById | filter:ship.name:pilot.ship | filter: $select.search | orderBy:'points'">
-                                <div><span data-ng-bind-html="pilot.name | highlight: $select.search"></span> ({{pilot.points}})</div>
-                                <ul class="list-inline">
-                                    <li><span class="label label-warning" tooltip="{{ 'UI.Skill' | translate }}">{{pilot.skill}}</span></li>
-                                    <li data-ng-repeat="s in pilot.slots track by $index">
-                                        <i class="xwing-font" ng-class="{
+<div class="col-sm-12 col-md-6" data-ng-repeat="ship in ships.selected track by $index" data-ng-controller="SquadCtrl">
+  <div class="panel panel-default box-shadow">
+    <div class="panel-heading" style="color: #f5f5f5; background: #333 url(images/data/pilots/{{ ship.pilot.id }}.png) no-repeat right">
+      <h4>{{ ship.name }} <small>Points: {{ ship.points }}</small>
+        <button data-ng-click="ships.selected.splice($index,1)" class="btn btn-sm btn-danger pull-right" data-tooltip="remove ship from current squad"><i class="fa fa-remove"></i></button>
+        <button data-ng-click="duplicateShip(ship)" class="btn btn-sm btn-primary pull-right" data-tooltip="duplicate ship"><i class="fa fa-copy"></i></button>
+      </h4>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="box-callout-warning box-callout">
+            <ui-select ng-model="ship.pilot" on-select="changePilot($item, $model)">
+              <ui-select-match placeholder="Select or search a pilot for {{ship.name}}">{{$select.selected.name}} - ({{$select.selected.points}})</ui-select-match>
+              <ui-select-choices repeat="pilot in cards.pilotsById | filter:ship.name:pilot.ship | filter: $select.search | orderBy:'points'">
+                <div><span data-ng-bind-html="pilot.name | highlight: $select.search"></span> ({{pilot.points}})</div>
+                <ul class="list-inline">
+                  <li><span class="label label-warning" tooltip="{{ 'UI.Skill' | translate }}">{{pilot.skill}}</span></li>
+                  <li data-ng-repeat="s in pilot.slots track by $index">
+                    <i class="xwing-font" ng-class="{
                                                     'xwing-font-missile': s === 'Missile',
                                                     'xwing-font-cargo': s === 'Cargo',
                                                     'xwing-font-illicit': s === 'Illicit',
@@ -84,45 +84,45 @@
                                                     'xwing-font-torpedo': s === 'Torpedo',
                                                     'xwing-font-astromech': s === 'Astromech'
                                             }" alt="{{s}} slot" title="{{s}} slot" tooltip="{{s}} slot"></i>
-                                    </li>
-                                </ul>
-                            </ui-select-choices>
-                        </ui-select>
-                        <p data-ng-bind-html="'pilots.' + ship.pilot.name + '.INFO' | translate | parseIconPlaceholder"></p>
-                    </div>
-                </div>
-            </div>
+                  </li>
+                </ul>
+              </ui-select-choices>
+            </ui-select>
+            <p data-ng-bind-html="'pilots.' + ship.pilot.name + '.INFO' | translate | parseIconPlaceholder"></p>
+          </div>
+        </div>
+      </div>
 
-            <div class="row">
-                <div class="col-sm-6">
-                    <table class="table">
-                        <tr>
-                            <td>{{ 'UI.Skill' | translate }}</td>
-                            <td><span class="label label-warning">{{ ship.stats.skill }}</span></td>
-                        </tr>
-                        <tr>
-                            <td>{{ 'UI.Attack' | translate }}</td>
-                            <td><span class="label label-danger">{{ ship.stats.attack }}</span></td>
-                        </tr>
-                        <tr>
-                            <td>{{ 'UI.Agility' | translate }}</td>
-                            <td><span class="label label-success">{{ ship.stats.agility }}</span></td>
-                        </tr>
-                        <tr>
-                            <td>{{ 'UI.Hull' | translate }}</td>
-                            <td><span class="label label-warning">{{ ship.stats.hull }}</span></td>
-                        </tr>
-                        <tr>
-                            <td>{{ 'UI.Shields' | translate }}</td>
-                            <td><span class="label label-info">{{ ship.stats.shields }}</span></td>
-                        </tr>
-                        <tr>
-                            <td>Actions</td>
-                            <td>
-                                <ul class="list-inline">
-                                    <li data-ng-repeat="action in ship.stats.actions">
-                                        <i class="xwing-font xwing-font-small"
-                                           data-ng-class="{
+      <div class="row">
+        <div class="col-sm-6">
+          <table class="table">
+            <tr>
+              <td>{{ 'UI.Skill' | translate }}</td>
+              <td><span class="label label-warning">{{ ship.stats.skill }}</span></td>
+            </tr>
+            <tr>
+              <td>{{ 'UI.Attack' | translate }}</td>
+              <td><span class="label label-danger">{{ ship.stats.attack }}</span></td>
+            </tr>
+            <tr>
+              <td>{{ 'UI.Agility' | translate }}</td>
+              <td><span class="label label-success">{{ ship.stats.agility }}</span></td>
+            </tr>
+            <tr>
+              <td>{{ 'UI.Hull' | translate }}</td>
+              <td><span class="label label-warning">{{ ship.stats.hull }}</span></td>
+            </tr>
+            <tr>
+              <td>{{ 'UI.Shields' | translate }}</td>
+              <td><span class="label label-info">{{ ship.stats.shields }}</span></td>
+            </tr>
+            <tr>
+              <td>Actions</td>
+              <td>
+                <ul class="list-inline">
+                  <li data-ng-repeat="action in ship.stats.actions">
+                    <i class="xwing-font xwing-font-small"
+                       data-ng-class="{
                                             'xwing-font-boost': action === 'Boost',
                                             'xwing-font-focus': action === 'Focus',
                                             'xwing-font-evade': action === 'Evade',
@@ -134,17 +134,17 @@
                                             'xwing-font-barrelroll': action === 'Barrel Roll',
                                             'xwing-font-cloak': action === 'Cloak'
                                     }" alt="{{ action }}" title="{{ action }}"></i>
-                                        {{ action }}</li>
-                                </ul>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Slots</td>
-                            <td>
-                                <ul class="list-inline">
-                                    <li data-ng-repeat="slot in ship.pilot.slots track by $index">
-                                        <i class="xwing-font xwing-font-small"
-                                           data-ng-class="{
+                    {{ action }}</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Slots</td>
+              <td>
+                <ul class="list-inline">
+                  <li data-ng-repeat="slot in ship.pilot.slots track by $index">
+                    <i class="xwing-font xwing-font-small"
+                       data-ng-class="{
                                             'xwing-font-missile': slot === 'Missile',
                                             'xwing-font-cargo': slot === 'Cargo',
                                             'xwing-font-illicit': slot === 'Illicit',
@@ -160,101 +160,101 @@
                                             'xwing-font-astromech': slot === 'Astromech',
                                             'xwing-font-system': slot === 'System'
                                     }" alt="{{slot}} slot" title="{{slot}} slot"></i>
-                                        {{ slot }}
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-                    </table>
-                    <!--
-                        <pre>
-                            {{ ship.stats | json }}
-                        </pre>
-                    -->
-                </div>
-                <div class="col-sm-6">
-                    <div class="thumbnail">
-                        <maneuver-table ship="ship.stats"></maneuver-table>
-                        <div class="caption">
-                            Maneuver Table
-                        </div>
-                    </div>
-
-                    <table class="table">
-                        <tr data-ng-repeat="slot in ship.pilot.slots track by $index">
-                            <td>
-                                <ui-select ng-model="ship.upgrades[$index]">
-                                    <ui-select-match allow-clear placeholder="Select {{ slot }}"
-                                                     popover="<p><small><em>{{ $select.selected.sources.join(', ') }}</em></small></p><p>{{ 'upgrades.' + $select.selected.name + '.INFO' | translate | parseIconPlaceholder }}</p>"
-                                                     popover-title="{{ $select.selected.name }}"
-                                                     popover-trigger="mouseenter"
-                                                     popover-placement="left"
-                                                     popover-append-to-body="true"><a ng-click="clearSelection($event, $select)">&times;</a> {{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
-                                    <ui-select-choices repeat="upgrade in cards.upgradesById | filter:slot:upgrade.slot | filter:$select.search | filterByShip:ship">
-                                        <div popover="<p><small><em>{{ upgrade.sources.join(', ') }}</em></small></p><p> {{ 'upgrades.' + upgrade.name + '.INFO' | translate | parseIconPlaceholder }}</p>"
-                                             popover-title="{{ upgrade.name }}"
-                                             popover-trigger="mouseenter"
-                                             popover-placement="left"
-                                             popover-append-to-body="true"><span ng-bind-html="upgrade.name | highlight: $select.search"></span> ({{ upgrade.points }})</div>
-                                    </ui-select-choices>
-                                </ui-select>
-                            </td>
-                        </tr>
-                        <tr data-ng-repeat="addon in getConferredAddons(ship.conferredAddon)">
-                            <td>
-                                  {{ addon }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <ui-select ng-model="ship.modifications[0]">
-                                    <ui-select-match placeholder="Select {{ 'UI.Mods' | translate }}"
-                                                     popover="<p><small><em>{{ $select.selected.sources.join(', ') }}</em></small></p><p>{{ 'modifications.' + $select.selected.name + '.INFO' | translate | parseIconPlaceholder }}</p>"
-                                                     popover-title="{{ $select.selected.name }}"
-                                                     popover-trigger="mouseenter"
-                                                     popover-placement="left"
-                                                     popover-append-to-body="true"><a ng-click="clearSelection($event, $select)">&times;</a> {{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
-                                    <ui-select-choices repeat="mod in cards.modificationsById | filter:$select.search | filterByShip:ship" >
-                                        <div popover="<p><small><em>{{ mod.sources.join(', ') }}</em></small></p> {{ 'modifications.' + mod.name + '.INFO' | translate | parseIconPlaceholder }}"
-                                             popover-title="{{ mod.name }}"
-                                             popover-trigger="mouseenter"
-                                             popover-placement="left"
-                                             popover-append-to-body="true"><span ng-bind-html="mod.name | highlight: $select.search"></span> ({{ mod.points }})</div>
-                                    </ui-select-choices>
-                                </ui-select>
-                            </td>
-                        </tr>
-                        <tr ng-show="hasTitles(ship)">
-                            <td>
-                                <ui-select ng-model="ship.title">
-                                    <ui-select-match placeholder="Select {{ 'UI.Title' | translate }}"
-                                                     popover="{{ 'titles.' + $select.selected.name + '.INFO' | translate | parseIconPlaceholder }}"
-                                                     popover-trigger="mouseenter"
-                                                     popover-placement="left"
-                                                     popover-append-to-body="true"><a ng-click="clearSelection($event, $select)">&times;</a> {{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
-                                    <ui-select-choices repeat="title in cards.titlesById | filter:$select.search | filterByShip:ship" >
-                                        <div popover="{{ 'titles.' + title.name + '.INFO' | translate | parseIconPlaceholder }}"
-                                             popover-trigger="mouseenter"
-                                             popover-placement="left"
-                                             popover-append-to-body="true">
-                                            <span ng-bind-html="title.name | highlight: $select.search"></span> ({{ title.points }})</div>
-                                    </ui-select-choices>
-                                </ui-select>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-
+                    {{ slot }}
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          </table>
+          <!--
+              <pre>
+                  {{ ship.stats | json }}
+              </pre>
+          -->
         </div>
+        <div class="col-sm-6">
+          <div class="thumbnail">
+            <maneuver-table ship="ship.stats"></maneuver-table>
+            <div class="caption">
+              Maneuver Table
+            </div>
+          </div>
+
+          <table class="table">
+            <tr data-ng-repeat="slot in ship.pilot.slots track by $index">
+              <td>
+                <ui-select ng-model="ship.upgrades[$index]">
+                  <ui-select-match allow-clear placeholder="Select {{ slot }}"
+                                   popover="<p><small><em>{{ $select.selected.sources.join(', ') }}</em></small></p><p>{{ 'upgrades.' + $select.selected.name + '.INFO' | translate | parseIconPlaceholder }}</p>"
+                                   popover-title="{{ $select.selected.name }}"
+                                   popover-trigger="mouseenter"
+                                   popover-placement="left"
+                                   popover-append-to-body="true"><a ng-click="clearSelection($event, $select)">&times;</a> {{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
+                  <ui-select-choices repeat="upgrade in cards.upgradesById | filter:slot:upgrade.slot | filter:$select.search | filterByShip:ship">
+                    <div popover="<p><small><em>{{ upgrade.sources.join(', ') }}</em></small></p><p> {{ 'upgrades.' + upgrade.name + '.INFO' | translate | parseIconPlaceholder }}</p>"
+                         popover-title="{{ upgrade.name }}"
+                         popover-trigger="mouseenter"
+                         popover-placement="left"
+                         popover-append-to-body="true"><span ng-bind-html="upgrade.name | highlight: $select.search"></span> ({{ upgrade.points }})</div>
+                  </ui-select-choices>
+                </ui-select>
+              </td>
+            </tr>
+            <tr data-ng-repeat="addon in getConferredAddons(ship.conferredAddon)">
+              <td>
+                {{ addon }}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <ui-select ng-model="ship.modifications[0]">
+                  <ui-select-match placeholder="Select {{ 'UI.Mods' | translate }}"
+                                   popover="<p><small><em>{{ $select.selected.sources.join(', ') }}</em></small></p><p>{{ 'modifications.' + $select.selected.name + '.INFO' | translate | parseIconPlaceholder }}</p>"
+                                   popover-title="{{ $select.selected.name }}"
+                                   popover-trigger="mouseenter"
+                                   popover-placement="left"
+                                   popover-append-to-body="true"><a ng-click="clearSelection($event, $select)">&times;</a> {{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
+                  <ui-select-choices repeat="mod in cards.modificationsById | filter:$select.search | filterByShip:ship" >
+                    <div popover="<p><small><em>{{ mod.sources.join(', ') }}</em></small></p> {{ 'modifications.' + mod.name + '.INFO' | translate | parseIconPlaceholder }}"
+                         popover-title="{{ mod.name }}"
+                         popover-trigger="mouseenter"
+                         popover-placement="left"
+                         popover-append-to-body="true"><span ng-bind-html="mod.name | highlight: $select.search"></span> ({{ mod.points }})</div>
+                  </ui-select-choices>
+                </ui-select>
+              </td>
+            </tr>
+            <tr ng-show="hasTitles(ship)">
+              <td>
+                <ui-select ng-model="ship.title">
+                  <ui-select-match placeholder="Select {{ 'UI.Title' | translate }}"
+                                   popover="{{ 'titles.' + $select.selected.name + '.INFO' | translate | parseIconPlaceholder }}"
+                                   popover-trigger="mouseenter"
+                                   popover-placement="left"
+                                   popover-append-to-body="true"><a ng-click="clearSelection($event, $select)">&times;</a> {{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
+                  <ui-select-choices repeat="title in cards.titlesById | filter:$select.search | filterByShip:ship" >
+                    <div popover="{{ 'titles.' + title.name + '.INFO' | translate | parseIconPlaceholder }}"
+                         popover-trigger="mouseenter"
+                         popover-placement="left"
+                         popover-append-to-body="true">
+                      <span ng-bind-html="title.name | highlight: $select.search"></span> ({{ title.points }})</div>
+                  </ui-select-choices>
+                </ui-select>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
     </div>
-    </div>
+  </div>
+</div>
 </div>
 
 <hr/>
 
-<h5>Squad</h5>
-    <pre>
-        {{ ships.selected | json }}
-    </pre>
+<h5>Squad Output</h5>
+  <pre>
+    {{ ships.selected | json }}
+  </pre>
 </div>

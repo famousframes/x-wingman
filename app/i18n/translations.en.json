@@ -640,6 +640,9 @@
   },
 
   "upgrades": {
+    "": {
+      "INFO": "Select an upgrade"
+    },
     "Ion Cannon Turret": {
       "INFO": "<strong>Attack:</strong> Attack 1 ship (even a ship outside your firing arc).%LINEBREAK%If this attack hits the target ship, the ship suffers 1 damage and receives 1 ion token.  Then cancel all dice results."
     },
@@ -1009,6 +1012,9 @@
   },
 
   "modifications": {
+    "": {
+      "INFO": "Select a modification"
+    },
     "Stealth Device": {
       "INFO": "Increase your agility value by 1.  If you are hit by an attack, discard this card."
     },
@@ -1057,6 +1063,9 @@
   },
 
   "titles": {
+    "": {
+      "INFO": "Select a title"
+    },
     "Slave I": {
       "INFO": "<span class=\"card-restriction\">Firespray-31 only.</span>%LINEBREAK%Your upgrade bar gains the %TORPEDO% upgrade icon."
     },
