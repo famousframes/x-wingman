@@ -1,0 +1,108 @@
+/* Import Bootstrap.less files */
+@import "bower_components/bootstrap-less/less/bootstrap.less";
+/* Import custom fonts */
+@import "fonts.less";
+/* Import custom icons */
+@import "icons.less";
+/* Import other styles */
+@import "cards.less";
+
+
+.browsehappy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+/* Space out content a bit */
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.header,
+.marketing,
+.footer {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Custom page header */
+.header {
+  border-bottom: 1px solid #e5e5e5;
+
+  /* Make the masthead heading the same height as the navigation */
+  h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 40px;
+    padding-bottom: 19px;
+  }
+}
+
+/* Custom page footer */
+.footer {
+  padding-top: 19px;
+  color: #777;
+  border-top: 1px solid #e5e5e5;
+}
+
+
+.info-maneuvers table {
+  table-layout: fixed;
+  width: 100%;
+  max-width: 300px;
+}
+
+.info-maneuvers table > tbody > tr > td {
+  border: 2px solid #d6c9d2;
+}
+
+.info-maneuvers table > tbody > tr > td:first-child {
+  color: white;
+  text-align: center;
+  padding: 3px;
+  background-color: #888888;
+  background-image: linear-gradient(rgba(45, 45, 45, 0.2) 50%, transparent 50%, transparent);
+  background-size: 5px 5px;
+}
+
+.info-maneuvers table > tbody > tr > td ~ td {
+  background-color: #a29199;
+}
+
+.box-callout-warning {
+  border-left-color: #f0ad4e !important;
+}
+.box-callout {
+  padding: 20px;
+  margin: 0 0 20px 0;
+  border: 1px solid #eee;
+  border-left-width: 5px;
+  border-radius: 3px;
+}
+
+.box-callout p {
+  margin: 10px 0 0 0;
+  font-size: 90%;
+}
+
+
+.flip {float: left; overflow: hidden; display: block;}
+.flipBasic {
+  position: absolute;
+  -webkit-backface-visibility: hidden;
+  margin: 0 10px 30px 0;
+  backface-visibility: hidden;
+  transition: -webkit-transform .5s;
+  transition: transform .5s;
+  -webkit-transform: perspective( 800px ) rotateY( 0deg );
+  transform: perspective( 800px ) rotateY( 0deg );     }
+.flipHideBack {
+  -webkit-transform:  perspective(800px) rotateY( 180deg );
+  transform:  perspective(800px) rotateY( 180deg );     }
+.flipHideFront {
+  -webkit-transform:  perspective(800px) rotateY( -180deg );
+  transform:  perspective(800px) rotateY( -180deg );     }

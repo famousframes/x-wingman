@@ -1,0 +1,135 @@
+<div>
+
+    <!-- faction selector -->
+    <div class="btn-group">
+        <label class="btn btn-primary" data-ng-model="faction" btn-radio="'Rebel Alliance'">Option 1</label>
+        <label class="btn btn-primary" data-ng-model="faction" btn-radio="'Galactic Empire'">Option 2</label>
+        <label class="btn btn-primary" data-ng-model="faction" btn-radio="'Scum and Villainy'">Option 3</label>
+    </div>
+
+    <hr/>
+
+    <!-- ship selector -->
+    <div class="row">
+        <div class="col-sm-10">
+            <ui-select ng-model="s.selected" theme="bootstrap">
+                <ui-select-match placeholder="Select or search a ship in the list...">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="ship in basicCardData.ships | listfilter:faction">
+                    <div ng-bind-html="ship.name | highlight: $select.search | filter:$select.search"></div>
+                    <ul class="list-inline">
+                        <li data-ng-repeat="a in ship.actions track by $index" class="icon-list">
+                            <i class="xwing-font" ng-class="{
+                                                'xwing-font-boost': a === 'Boost',
+                                                'xwing-font-focus': a === 'Focus',
+                                                'xwing-font-evade': a === 'Evade',
+                                                'xwing-font-reinforce': a === 'Reinforce',
+                                                'xwing-font-targetlock': a === 'Target Lock',
+                                                'xwing-font-recover': a === 'Recover',
+                                                'xwing-font-coordinate': a === 'Coordinate',
+                                                'xwing-font-jam': a === 'Jam',
+                                                'xwing-font-barrelroll': a === 'Barrel Roll',
+                                }" alt="{{a}}" title="{{a}}"></i>
+                        </li>
+                    </ul>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="col-sm-2">
+            <button class="btn btn-success pull-right" ng-click="addToCollection(s.selected)">Add to squad</button>
+        </div>
+    </div>
+
+    <hr/>
+
+    <!-- selected ships -->
+    <div ng-show="s.selected">
+        <div class="panel panel-default" data-ng-repeat="ship in ships.selected track by $index">
+            <div class="panel-heading">
+                <h4>{{ ship.name }}
+                    <small>
+                        <i data-ng-repeat="a in ship.actions" class="xwing-font" ng-class="{
+                                        'xwing-font-boost': a === 'Boost',
+                                        'xwing-font-focus': a === 'Focus',
+                                        'xwing-font-evade': a === 'Evade',
+                                        'xwing-font-reinforce': a === 'Reinforce',
+                                        'xwing-font-targetlock': a === 'Target Lock',
+                                        'xwing-font-recover': a === 'Recover',
+                                        'xwing-font-coordinate': a === 'Coordinate',
+                                        'xwing-font-jam': a === 'Jam',
+                                        'xwing-font-barrelroll': a === 'Barrel Roll',
+                        }" alt="{{a}}" title="{{a}}"></i>
+                    </small>
+                </h4>
+             </div>
+            <div class="panel-body">
+                <div>
+                    {{$index}}
+                    {{ships.selected[$index]}}
+                    <ui-select ng-model="ships.selected[$index].pilot">
+                        <ui-select-match placeholder="Select or search a pilot for {{ship.name}}">{{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
+                        <ui-select-choices repeat="pilot in basicCardData.pilotsById track by $index | filter:ship.name:pilot.ship | orderBy:'points'">
+                            <div><span ng-bind-html="pilot.name | highlight: $select.search"></span> ({{pilot.points}}) <a href="#" tooltip="{{pilot.points}}" tooltip-placement="right">(?)</a></div>
+                            <ul class="list-inline">
+                                <li><span class="label label-warning">{{pilot.skill}}</span></li>
+                                <li data-ng-repeat="s in pilot.slots track by $index">
+                                    <i class="xwing-font" ng-class="{
+                                            'xwing-font-missile': s === 'Missile',
+                                            'xwing-font-cargo': s === 'Cargo',
+                                            'xwing-font-crew': s === 'Crew',
+                                            'xwing-font-boost': s === 'Boost',
+                                            'xwing-font-turret': s === 'Turret',
+                                            'xwing-font-elite': s === 'Elite',
+                                            'xwing-font-hardpoint': s === 'Hardpoint',
+                                            'xwing-font-team': s === 'Team',
+                                            'xwing-font-torpedo': s === 'Torpedo',
+                                            'xwing-font-astromech': s === 'Astromech'
+                                    }" alt="{{s}} slot" title="{{s}} slot"></i>
+                                </li>
+                            </ul>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-sm-8">
+                        <table>
+                            <tr>
+                                <td>Skill</td>
+                                <td>{{ ship.pilot.skill }}</td>
+                            </tr>
+                            <tr>
+                                <td>A</td>
+                                <td>{{ ship.attack }}</td>
+                            </tr>
+                            <tr>
+                                <td>D</td>
+                                <td>{{ ship.agility }}</td>
+                            </tr>
+                            <tr>
+                                <td>H</td>
+                                <td>{{ ship.hull }}</td>
+                            </tr>
+                            <tr>
+                                <td>S</td>
+                                <td>{{ ship.shields }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-sm-4">
+                        <maneuver-table ship="ship"></maneuver-table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <hr/>
+
+    <h4>debug</h4>
+    <pre>
+        {{ ships.selected }}
+    </pre>
+
+</div>

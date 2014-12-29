@@ -1,0 +1,244 @@
+<div data-ng-controller="BrowseCtrl">
+
+    <div class="row">
+        <div class="col-sm-12 well well-sm">
+            <div class="col-sm-6">
+                <input type="text"
+                       class="form-control"
+                       data-ng-model="qSearch"
+                       id="searchCard"
+                       placeholder="{{ 'UI.Enter Cardname' | translate }}">
+            </div>
+            <div class="col-sm-6">
+                <div class="btn-group">
+                    <label class="btn btn-sm btn-primary" data-ng-model="filterView.showShips" btn-checkbox>{{ 'UI.Ships' | translate }}</label>
+                    <label class="btn btn-sm btn-primary" data-ng-model="filterView.showPilots" btn-checkbox>{{ 'UI.Pilots' | translate }}</label>
+                    <label class="btn btn-sm btn-primary" data-ng-model="filterView.showUpgrades" btn-checkbox>{{ 'UI.Upgrades' | translate }}</label>
+                    <label class="btn btn-sm btn-primary" data-ng-model="filterView.showModifications" btn-checkbox>{{ 'UI.Mods' | translate }}</label>
+                    <label class="btn btn-sm btn-primary" data-ng-model="filterView.showTitles" btn-checkbox>{{ 'UI.Titles' | translate }}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-show="filterView.showShips">
+        <div class="col-sm-4 col-md-3 col-ld-2"
+             data-ng-repeat="ship in ships | filter:qSearch | filterShipsByFaction:'Rebel Alliance'"
+             data-ng-controller="ShipCtrl"
+             data-ng-click="hideDetails = !hideDetails">
+            <flip>
+                <flip-panel class="panel panel-default box-shadow">
+                    <div class="panel-heading" style="color: #f5f5f5; background: #333;">
+                        <h4>{{ ship.name }}</h4>
+                    </div>
+                    <div class="panel-body">
+                        <p class="list-group-item-text">
+                            <span class="label label-danger" tooltip="{{ 'UI.Attack' | translate }}">{{ ship.attack }}</span>
+                            <span class="label label-success" tooltip="{{ 'UI.Agility' | translate }}">{{ ship.agility }}</span>
+                            <span class="label label-warning" tooltip="{{ 'UI.Hull' | translate }}">{{ ship.hull }}</span>
+                            <span class="label label-primary" tooltip="{{ 'UI.Shields' | translate }}">{{ ship.shields }}</span> |
+                            <span data-ng-repeat="a in ship.actions">
+                                <i class="xwing-font xwing-font-small"
+                                   data-ng-class="{
+                                            'xwing-font-boost': a === 'Boost',
+                                            'xwing-font-focus': a === 'Focus',
+                                            'xwing-font-evade': a === 'Evade',
+                                            'xwing-font-reinforce': a === 'Reinforce',
+                                            'xwing-font-targetlock': a === 'Target Lock',
+                                            'xwing-font-recover': a === 'Recover',
+                                            'xwing-font-coordinate': a === 'Coordinate',
+                                            'xwing-font-jam': a === 'Jam',
+                                            'xwing-font-barrelroll': a === 'Barrel Roll',
+                            }" alt="{{ 'UI.' + a | translate }}" title="{{ 'UI.' + a | translate }}" tooltip="{{ 'UI.' + a | translate }}"></i>
+                            </span>
+                        </p>
+                    </div>
+
+                </flip-panel>
+                <flip-panel class="panel panel-default box-shadow">
+                    <div class="panel-heading" style="color: #f5f5f5; background: #333">
+                        <h4>{{ ship.name }} <small>Maneuvers</small></h4>
+                    </div>
+                    <div class="panel-body">
+                        <maneuver-table ship="ship"></maneuver-table>
+                    </div>
+                </flip-panel>
+            </flip>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-12" ng-show="filterView.showShips">
+            <div class="list-group">
+                <h4>{{ 'UI.Rebel Alliance' | translate }}</h4>
+                <a class="list-group-item"
+                   data-ng-repeat="ship in ships | filter:qSearch | filterShipsByFaction:'Rebel Alliance'"
+                   data-ng-controller="ShipCtrl"
+                   data-ng-click="hideDetails = !hideDetails">
+                    <h4 class="list-group-item-heading">{{ 'ships.' + ship.name | translate }}</h4>
+                    <p class="list-group-item-text">
+                        <span class="label label-danger" tooltip="{{ 'UI.Attack' | translate }}">{{ ship.attack }}</span>
+                        <span class="label label-success" tooltip="{{ 'UI.Agility' | translate }}">{{ ship.agility }}</span>
+                        <span class="label label-warning" tooltip="{{ 'UI.Hull' | translate }}">{{ ship.hull }}</span>
+                        <span class="label label-primary" tooltip="{{ 'UI.Shields' | translate }}">{{ ship.shields }}</span> |
+                        <span data-ng-repeat="a in ship.actions">
+                            <i class="xwing-font xwing-font-small"
+                               data-ng-class="{
+                                        'xwing-font-boost': a === 'Boost',
+                                        'xwing-font-focus': a === 'Focus',
+                                        'xwing-font-evade': a === 'Evade',
+                                        'xwing-font-reinforce': a === 'Reinforce',
+                                        'xwing-font-targetlock': a === 'Target Lock',
+                                        'xwing-font-recover': a === 'Recover',
+                                        'xwing-font-coordinate': a === 'Coordinate',
+                                        'xwing-font-jam': a === 'Jam',
+                                        'xwing-font-barrelroll': a === 'Barrel Roll',
+                        }" alt="{{ 'UI.' + a | translate }}" title="{{ 'UI.' + a | translate }}" tooltip="{{ 'UI.' + a | translate }}"></i>
+                        </span>
+                    <div collapse="hideDetails">
+                        <hr/>
+                        <maneuver-table ship="ship"></maneuver-table>
+                    </div>
+                    </p>
+                </a>
+            </div>
+            <div class="list-group">
+                <h4>{{ 'UI.Galactic Empire' | translate }}</h4>
+                <a class="list-group-item"
+                   data-ng-repeat="ship in ships | filter:qSearch | filterShipsByFaction:'Galactic Empire'"
+                   data-ng-controller="ShipCtrl"
+                   data-ng-click="hideDetails = !hideDetails">
+                    <h4 class="list-group-item-heading">{{ 'ships.' + ship.name | translate }}</h4>
+                    <p class="list-group-item-text">
+                        <span class="label label-danger" tooltip="{{ 'UI.Attack' | translate }}">{{ ship.attack }}</span>
+                        <span class="label label-success" tooltip="{{ 'UI.Agility' | translate }}">{{ ship.agility }}</span>
+                        <span class="label label-warning" tooltip="{{ 'UI.Hull' | translate }}">{{ ship.hull }}</span>
+                        <span class="label label-primary" tooltip="{{ 'UI.Shields' | translate }}">{{ ship.shields }}</span> |
+                        <span data-ng-repeat="a in ship.actions">
+                            <i class="xwing-font xwing-font-small"
+                               data-ng-class="{
+                                        'xwing-font-boost': a === 'Boost',
+                                        'xwing-font-focus': a === 'Focus',
+                                        'xwing-font-evade': a === 'Evade',
+                                        'xwing-font-reinforce': a === 'Reinforce',
+                                        'xwing-font-targetlock': a === 'Target Lock',
+                                        'xwing-font-recover': a === 'Recover',
+                                        'xwing-font-coordinate': a === 'Coordinate',
+                                        'xwing-font-jam': a === 'Jam',
+                                        'xwing-font-barrelroll': a === 'Barrel Roll',
+                        }" alt="{{ 'UI.' + a | translate }}" title="{{ 'UI.' + a | translate }}" tooltip="{{ 'UI.' + a | translate }}"></i>
+                        </span>
+                    <div collapse="hideDetails">
+                        <hr/>
+                        <maneuver-table ship="ship"></maneuver-table>
+                    </div>
+                    </p>
+                </a>
+            </div>
+            <div class="list-group">
+                <h4>{{ 'UI.Scum and Villainy' | translate }}</h4>
+                <a class="list-group-item"
+                   data-ng-repeat="ship in ships | filter:qSearch | filterShipsByFaction:'Scum and Villainy'"
+                   data-ng-controller="ShipCtrl"
+                   data-ng-click="hideDetails = !hideDetails">
+                    <h4 class="list-group-item-heading">{{ 'ships.' + ship.name | translate }}</h4>
+                    <p class="list-group-item-text">
+                        <span class="label label-danger" tooltip="{{ 'UI.Attack' | translate }}">{{ ship.attack }}</span>
+                        <span class="label label-success" tooltip="{{ 'UI.Agility' | translate }}">{{ ship.agility }}</span>
+                        <span class="label label-warning" tooltip="{{ 'UI.Hull' | translate }}">{{ ship.hull }}</span>
+                        <span class="label label-primary" tooltip="{{ 'UI.Shields' | translate }}">{{ ship.shields }}</span> |
+                        <span data-ng-repeat="a in ship.actions">
+                            <i class="xwing-font xwing-font-small"
+                               data-ng-class="{
+                                        'xwing-font-boost': a === 'Boost',
+                                        'xwing-font-focus': a === 'Focus',
+                                        'xwing-font-evade': a === 'Evade',
+                                        'xwing-font-reinforce': a === 'Reinforce',
+                                        'xwing-font-targetlock': a === 'Target Lock',
+                                        'xwing-font-recover': a === 'Recover',
+                                        'xwing-font-coordinate': a === 'Coordinate',
+                                        'xwing-font-jam': a === 'Jam',
+                                        'xwing-font-barrelroll': a === 'Barrel Roll',
+                        }" alt="{{ 'UI.' + a | translate }}" title="{{ 'UI.' + a | translate }}" tooltip="{{ 'UI.' + a | translate }}"></i>
+                        </span>
+                    <div collapse="hideDetails">
+                        <hr/>
+                        <maneuver-table ship="ship"></maneuver-table>
+                    </div>
+                    </p>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-sm-12" ng-show="filterView.showPilots">
+            <div class="list-group">
+                <h4>{{ 'UI.Pilots' | translate }}</h4>
+                <a class="list-group-item"
+                   data-ng-repeat="pilot in pilots | filter:qSearch"
+                   data-ng-controller="PilotCtrl">
+                    <h4 class="list-group-item-heading">{{ pilot.name | translate }} <small><i data-ng-show="pilot.unique" class="fa fa-certificate fa-fw" tooltip="{{ 'Unique pilot' | translate }}"></i></small></h4>
+                    <p class="list-group-item-text">
+                        <span class="label label-warning" tooltip="Pilot Skill">{{ pilot.skill }}</span>
+                        <span class="label label-default" tooltip="Points"><i class="fa fa-plus-square"></i> {{ pilot.points }}</span> |
+                        <span class="label label-info" data-ng-init="getShip(pilot.ship)" popover="{{ pilotShip }}" popover-trigger="mouseenter">{{ pilot.ship }}</span> |
+                        <span data-ng-repeat="s in pilot.slots track by $index">
+                            <i class="xwing-font fa-fw" style="font-size: 1.2em"
+                               data-ng-class="{
+                                            'xwing-font-missile': s === 'Missile',
+                                            'xwing-font-cargo': s === 'Cargo',
+                                            'xwing-font-crew': s === 'Crew',
+                                            'xwing-font-boost': s === 'Boost',
+                                            'xwing-font-turret': s === 'Turret',
+                                            'xwing-font-elite': s === 'Elite',
+                                            'xwing-font-hardpoint': s === 'Hardpoint',
+                                            'xwing-font-team': s === 'Team',
+                                            'xwing-font-torpedo': s === 'Torpedo',
+                                            'xwing-font-astromech': s === 'Astromech'
+                                    }" alt="{{ 'UI.' + s | translate }}" title="{{ 'UI.' + s | translate }}" tooltip="{{ 'UI.' +s | translate }}"></i>
+                        </span>
+                    <p translate="{{ 'pilots.'+pilot.name+'.INFO' | translate | parseIconPlaceholder }}"></p>
+                    </p>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-sm-12" ng-show="filterView.showUpgrades">
+            <div class="list-group">
+                <h4>{{ 'UI.Upgrades' | translate }}</h4>
+                <a class="list-group-item" data-ng-repeat="upgrade in upgrades | filter:qSearch">
+                    <h4 class="list-group-item-heading">{{ upgrade.name | translate}} <small><span class="label label-default pull-right"><i class="fa fa-plus-square"></i> {{upgrade.points}}</span></small></h4>
+                    <p class="list-group-item-text">
+                    <p translate="{{ 'upgrades.'+upgrade.name+'.INFO' | translate | parseIconPlaceholder }}"></p>
+                    </p>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-sm-12" ng-show="filterView.showModifications">
+            <div class="list-group">
+                <h4>{{ 'UI.Mods' | translate }}</h4>
+                <a class="list-group-item" data-ng-repeat="mod in modifications | filter:qSearch">
+                    <h4 class="list-group-item-heading">{{ mod.name | translate }} <small><span class="label label-default pull-right"><i class="fa fa-plus-square"></i> {{mod.points}}</span></small></h4>
+                    <p class="list-group-item-text">
+                    <p translate="{{ 'modifications.' + mod.name + '.INFO' | translate | parseIconPlaceholder }}"></p>
+                    </p>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-sm-12" ng-show="filterView.showTitles">
+            <div class="list-group">
+                <h4>{{ 'UI.Titles' | translate }}</h4>
+                <a class="list-group-item" data-ng-repeat="title in titles | filter:qSearch">
+                    <h4 class="list-group-item-heading">{{ title.name | translate}} <small><span class="label label-default pull-right"><i class="fa fa-plus-square"></i> {{title.points}}</span></small></h4>
+                    <p class="list-group-item-text">
+                    <p translate="{{ 'titles.' + title.name + '.INFO' | translate | parseIconPlaceholder }}"></p>
+                    </p>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>

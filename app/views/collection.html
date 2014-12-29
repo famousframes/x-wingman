@@ -1,0 +1,76 @@
+<h1>Expansions</h1>
+<div class="row">
+    <div class="col-sm-12 well well-sm">
+        <div class="col-sm-12">
+            <input type="text"
+                   class="form-control"
+                   data-ng-model="qSearch"
+                   id="searchCard"
+                   placeholder="{{ 'UI.Search' | translate }}">
+            <p class="help-block"><small>f.e: "TIE" to list all expansions containing <em>TIE</em></small></p>
+        </div>
+        <div class="col-sm-12">
+            <div class="btn-group">
+                <label class="btn btn-sm btn-primary" data-ng-model="filterView.showSeason[0]" btn-checkbox>{{ 'UI.Season' | translate }} 1</label>
+                <label class="btn btn-sm btn-primary" data-ng-model="filterView.showSeason[1]" btn-checkbox>{{ 'UI.Season' | translate }} 2</label>
+                <label class="btn btn-sm btn-primary" data-ng-model="filterView.showSeason[2]" btn-checkbox>{{ 'UI.Season' | translate }} 3</label>
+                <label class="btn btn-sm btn-primary" data-ng-model="filterView.showSeason[3]" btn-checkbox>{{ 'UI.Season' | translate }} 4</label>
+                <label class="btn btn-sm btn-primary" data-ng-model="filterView.showSeason[4]" btn-checkbox>{{ 'UI.Season' | translate }} 5</label>
+            </div>
+            <div class="btn-group">
+                <label class="btn btn-sm btn-primary" ng-model="sortView" btn-radio="'name'" data-ng-click="changeOrder('name')">By name <i class="fa" data-ng-class="{'fa-sort-amount-desc': reverseOrder === true, 'fa-sort-amount-asc': reverseOrder === false}"></i></label>
+                <label class="btn btn-sm btn-primary" ng-model="sortView" btn-radio="'wave'" data-ng-click="changeOrder('wave')">By wave <i class="fa" data-ng-class="{'fa-sort-amount-desc': reverseOrder === true, 'fa-sort-amount-asc': reverseOrder === false}"></i></label>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-danger btn-sm" data-ng-click="clearAll()">clear my collection</button>
+            </div>
+            <p class="help-block"><small>enable or disable specific season from listing</small></p>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <tabset>
+        <tab heading="Expansions">
+            <table class="table table-striped">
+                <tr data-ng-repeat="expansion in expansions | filter:qSearch.$" data-ng-show="filterView.showSeason[expansion.wave-1]">
+                    <td>
+                        <h4>{{ 'expansions.' + expansion.name + '.name' | translate }} <small>({{ 'UI.Season' | translate}} {{ expansion.wave }})</small></h4>
+                        <p>
+                            <small>{{ 'expansions.' + expansion.name + '.info' | translate }}</small>
+                        </p>
+                    </td>
+                    <td>
+                        <img data-ng-src="images/data/{{ 'expansions.' + expansion.name + '.file' | translate }}" class="img-responsive img-thumbnail" data-ng-click="open(expansion)"/>
+                        <button class="btn btn-sm btn-default btn-block" data-ng-click="add(expansion)">Add</button>
+                    </td>
+                </tr>
+            </table>
+        </tab>
+        <tab heading="My Collection ({{ myCollection.length }})">
+            <table class="table table-striped">
+                <tr data-ng-repeat="expansion in myCollection track by $index | filter:qSearch | orderBy:sortBy:reverseOrder" data-ng-show="filterView.showSeason[expansion.wave-1]">
+                    <td>
+                        <h4>{{ 'expansions.' + expansion.name + '.name' | translate }} <small>({{ 'UI.Season' | translate}} {{ expansion.wave }})</small></h4>
+                        <p>
+                            <small>{{ 'expansions.' + expansion.name + '.info' | translate }}</small>
+                        </p>
+                    </td>
+                    <td>
+                        <img data-ng-src="images/data/{{ 'expansions.' + expansion.name + '.file' | translate }}" class="img-responsive img-thumbnail" data-ng-click="open(expansion)"/>
+                    </td>
+                </tr>
+            </table>
+        </tab>
+    </tabset>
+</div>
+<script type="text/ng-template" id="imageModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">{{ 'expansions.' + expansion.name + '.name' | translate }}</h3>
+    </div>
+    <div class="modal-body">
+        <img data-ng-src="images/data/{{ 'expansions.' + expansion.name + '.file' | translate }}" class="img-responsive" />
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" data-ng-click="cancel()">Close</button>
+    </div>
+</script>
