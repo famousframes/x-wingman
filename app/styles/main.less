@@ -1,9 +1,9 @@
 /* Import Bootstrap.less files */
 @import "bower_components/bootstrap-less/less/bootstrap.less";
-/* Import custom fonts */
-@import "fonts.less";
 /* Import custom icons */
 @import "icons.less";
+/* Import custom fonts */
+@import "fonts.less";
 /* Import other styles */
 @import "cards.less";
 
@@ -49,6 +49,34 @@ body {
   border-top: 1px solid #e5e5e5;
 }
 
+/* Custom buttons */
+.btn-xlarge{
+  position: relative;
+  vertical-align: center;
+  margin: 30px;
+  /*width: 100%;*/
+  height: 200px;
+  padding: 48px 48px;
+  font-size: 18px;
+  color: white;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  background: #aaa;
+  border: 0;
+  border-bottom: 3px solid #999;
+  cursor: pointer;
+  -webkit-box-shadow: inset 0 -3px #999;
+  box-shadow: inset 0 -3px #999;
+}
+.btn-xlarge:active {
+  top: 2px;
+  outline: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.btn-xlarge:hover {
+  /*background: #ccc;*/
+}
 
 .info-maneuvers table {
   table-layout: fixed;

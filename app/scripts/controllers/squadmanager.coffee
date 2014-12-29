@@ -15,7 +15,9 @@ angular.module('ngAppBaseApp')
   # prepare defaults
   $scope.faction = 'Rebel Alliance'
   $scope.s = selected: ''
-  $scope.ships = selected: []
+  $scope.ships =
+    info: {}
+    selected: []
   $scope.cards =
     ships: CardData.basicCardData.ships
     pilots: {}

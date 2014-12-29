@@ -1,10 +1,20 @@
 <div>
 
 <!-- faction selector -->
-<div class="btn-group">
-  <label class="btn btn-primary" data-ng-model="faction" btn-radio="'Rebel Alliance'">{{ 'UI.Rebel Alliance' | translate }}</label>
-  <label class="btn btn-primary" data-ng-model="faction" btn-radio="'Galactic Empire'">{{ 'UI.Galactic Empire' | translate }}</label>
-  <label class="btn btn-primary" data-ng-model="faction" btn-radio="'Scum and Villainy'">{{ 'UI.Scum and Villainy' | translate }}</label>
+<div class="row">
+  <div class="col-sm-12 text-center">
+    <button class="btn btn-primary btn-xlarge" data-ng-model="faction" btn-radio="'Rebel Alliance'"><i class="fa fa-rebel fa-3x"></i> <p>{{ 'UI.Rebel Alliance' | translate }}</p></button>
+    <button class="btn btn-primary btn-xlarge" data-ng-model="faction" btn-radio="'Galactic Empire'"><i class="fa fa-ge fa-3x"></i> <p>{{ 'UI.Galactic Empire' | translate }}</p></button>
+    <button class="btn btn-primary btn-xlarge" data-ng-model="faction" btn-radio="'Scum and Villainy'"><i class="fa xwing-font xwing-font-3x xwing-font-illicit"></i> <p>{{ 'UI.Scum and Villainy' | translate }}</p></button>
+  </div>
+</div>
+
+<hr/>
+
+<div class="row">
+  <div class="col-sm-12 squad-name">
+    <input type="text" class="form-control" placeholder="Enter a squad name" data-ng-model="ships.info.name" />
+  </div>
 </div>
 
 <hr/>
@@ -18,7 +28,7 @@
         <div ng-bind-html="ship.name | highlight: $select.search"></div>
         <ul class="list-inline">
           <li data-ng-repeat="a in ship.actions track by $index" class="icon-list">
-            <i class="xwing-font" ng-class="{
+            <i class="xwing-font" data-ng-class="{
                                     'xwing-font-boost': a === 'Boost',
                                     'xwing-font-focus': a === 'Focus',
                                     'xwing-font-evade': a === 'Evade',
@@ -28,14 +38,14 @@
                                     'xwing-font-coordinate': a === 'Coordinate',
                                     'xwing-font-jam': a === 'Jam',
                                     'xwing-font-barrelroll': a === 'Barrel Roll',
-                    }" alt="{{a}}" title="{{a}}"></i>
+                    }" alt="{{a}}" title="{{a}}" data-tooltip="{{a}}"></i>
           </li>
         </ul>
       </ui-select-choices>
     </ui-select>
   </div>
   <div class="col-sm-2">
-    <button class="btn btn-success pull-right" ng-click="addToCollection(s.selected)">Add to squad</button>
+    <button class="btn btn-success pull-right" data-ng-click="addToCollection(s.selected)"><i class="fa fa-plus"></i> Add to squad</button>
   </div>
 </div>
 
@@ -54,8 +64,7 @@
   <div class="panel panel-default box-shadow">
     <div class="panel-heading" style="color: #f5f5f5; background: #333 url(images/data/pilots/{{ ship.pilot.id }}.png) no-repeat right">
       <h4>{{ ship.name }} <small>Points: {{ ship.points }}</small>
-        <button data-ng-click="ships.selected.splice($index,1)" class="btn btn-sm btn-danger pull-right" data-tooltip="remove ship from current squad"><i class="fa fa-remove"></i></button>
-        <button data-ng-click="duplicateShip(ship)" class="btn btn-sm btn-primary pull-right" data-tooltip="duplicate ship"><i class="fa fa-copy"></i></button>
+        <button data-ng-click="ships.selected.splice($index,1)" class="btn btn-sm btn-danger pull-right" data-tooltip="remove ship from squad"><i class="fa fa-remove"></i></button>
       </h4>
     </div>
     <div class="panel-body">
@@ -65,11 +74,11 @@
             <ui-select ng-model="ship.pilot" on-select="changePilot($item, $model)">
               <ui-select-match placeholder="Select or search a pilot for {{ship.name}}">{{$select.selected.name}} - ({{$select.selected.points}})</ui-select-match>
               <ui-select-choices repeat="pilot in cards.pilotsById | filter:ship.name:pilot.ship | filter: $select.search | orderBy:'points'">
-                <div><span data-ng-bind-html="pilot.name | highlight: $select.search"></span> ({{pilot.points}})</div>
+                <div><span data-ng-if="pilot.unique == true"><small><i class="fa fa-asterisk"></i></small> </span><span data-ng-bind-html="pilot.name | highlight: $select.search"></span> ({{pilot.points}})</div>
                 <ul class="list-inline">
-                  <li><span class="label label-warning" tooltip="{{ 'UI.Skill' | translate }}">{{pilot.skill}}</span></li>
+                  <li><span class="label label-warning" data-tooltip="{{ 'UI.Skill' | translate }}">{{pilot.skill}}</span></li>
                   <li data-ng-repeat="s in pilot.slots track by $index">
-                    <i class="xwing-font" ng-class="{
+                    <i class="xwing-font" data-ng-class="{
                                                     'xwing-font-missile': s === 'Missile',
                                                     'xwing-font-cargo': s === 'Cargo',
                                                     'xwing-font-illicit': s === 'Illicit',
@@ -83,7 +92,7 @@
                                                     'xwing-font-team': s === 'Team',
                                                     'xwing-font-torpedo': s === 'Torpedo',
                                                     'xwing-font-astromech': s === 'Astromech'
-                                            }" alt="{{s}} slot" title="{{s}} slot" tooltip="{{s}} slot"></i>
+                                            }" alt="{{s}} slot" title="{{s}} slot" data-tooltip="{{s}} slot"></i>
                   </li>
                 </ul>
               </ui-select-choices>
@@ -166,12 +175,8 @@
               </td>
             </tr>
           </table>
-          <!--
-              <pre>
-                  {{ ship.stats | json }}
-              </pre>
-          -->
         </div>
+
         <div class="col-sm-6">
           <div class="thumbnail">
             <maneuver-table ship="ship.stats"></maneuver-table>
@@ -189,13 +194,13 @@
                                    popover-title="{{ $select.selected.name }}"
                                    popover-trigger="mouseenter"
                                    popover-placement="left"
-                                   popover-append-to-body="true"><a ng-click="clearSelection($event, $select)">&times;</a> {{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
-                  <ui-select-choices repeat="upgrade in cards.upgradesById | filter:slot:upgrade.slot | filter:$select.search | filterByShip:ship">
+                                   popover-append-to-body="true"><a data-ng-click="clearSelection($event, $select)">&times;</a> {{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
+                  <ui-select-choices repeat="upgrade in cards.upgradesById | filter:slot:upgrade.slot | filter:$select.search | filterByShip:ship | orderBy:'points'">
                     <div popover="<p><small><em>{{ upgrade.sources.join(', ') }}</em></small></p><p> {{ 'upgrades.' + upgrade.name + '.INFO' | translate | parseIconPlaceholder }}</p>"
                          popover-title="{{ upgrade.name }}"
                          popover-trigger="mouseenter"
                          popover-placement="left"
-                         popover-append-to-body="true"><span ng-bind-html="upgrade.name | highlight: $select.search"></span> ({{ upgrade.points }})</div>
+                         popover-append-to-body="true"><span data-ng-bind-html="upgrade.name | highlight: $select.search"></span> ({{ upgrade.points }})</div>
                   </ui-select-choices>
                 </ui-select>
               </td>
@@ -213,13 +218,13 @@
                                    popover-title="{{ $select.selected.name }}"
                                    popover-trigger="mouseenter"
                                    popover-placement="left"
-                                   popover-append-to-body="true"><a ng-click="clearSelection($event, $select)">&times;</a> {{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
-                  <ui-select-choices repeat="mod in cards.modificationsById | filter:$select.search | filterByShip:ship" >
+                                   popover-append-to-body="true"><a data-ng-click="clearSelection($event, $select)">&times;</a> {{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
+                  <ui-select-choices repeat="mod in cards.modificationsById | filter:$select.search | filterByShip:ship | orderBy:'points'">
                     <div popover="<p><small><em>{{ mod.sources.join(', ') }}</em></small></p> {{ 'modifications.' + mod.name + '.INFO' | translate | parseIconPlaceholder }}"
                          popover-title="{{ mod.name }}"
                          popover-trigger="mouseenter"
                          popover-placement="left"
-                         popover-append-to-body="true"><span ng-bind-html="mod.name | highlight: $select.search"></span> ({{ mod.points }})</div>
+                         popover-append-to-body="true"><span data-ng-bind-html="mod.name | highlight: $select.search"></span> ({{ mod.points }})</div>
                   </ui-select-choices>
                 </ui-select>
               </td>
@@ -231,13 +236,13 @@
                                    popover="{{ 'titles.' + $select.selected.name + '.INFO' | translate | parseIconPlaceholder }}"
                                    popover-trigger="mouseenter"
                                    popover-placement="left"
-                                   popover-append-to-body="true"><a ng-click="clearSelection($event, $select)">&times;</a> {{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
-                  <ui-select-choices repeat="title in cards.titlesById | filter:$select.search | filterByShip:ship" >
+                                   popover-append-to-body="true"><a data-ng-click="clearSelection($event, $select)">&times;</a> {{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
+                  <ui-select-choices repeat="title in cards.titlesById | filter:$select.search | filterByShip:ship | orderBy:'points'">
                     <div popover="{{ 'titles.' + title.name + '.INFO' | translate | parseIconPlaceholder }}"
                          popover-trigger="mouseenter"
                          popover-placement="left"
                          popover-append-to-body="true">
-                      <span ng-bind-html="title.name | highlight: $select.search"></span> ({{ title.points }})</div>
+                      <span data-ng-bind-html="title.name | highlight: $select.search"></span> ({{ title.points }})</div>
                   </ui-select-choices>
                 </ui-select>
               </td>
@@ -255,6 +260,6 @@
 
 <h5>Squad Output</h5>
   <pre>
-    {{ ships.selected | json }}
+    {{ ships | json }}
   </pre>
 </div>
