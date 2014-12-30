@@ -157,8 +157,12 @@ angular.module('ngAppBaseApp')
       upgrade.modifier_func($scope.ship.stats) if upgrade?.modifier_func?
       $scope.ship.points += upgrade.points if upgrade?
 
+    # apply conferred addon points
+    for confAddon in $scope.ship.conferredAddon
+      confAddon.addon.modifier_func($scope.ship.stats) if confAddon.addon?.modifier_func?
+      $scope.ship.points += confAddon.addon.points if confAddon.addon?
+
     # apply title modifier
-    # TODO: Implement confersAddon
     $scope.ship.title.modifier_func($scope.ship.stats) if $scope.ship.title?.modifier_func?
     $scope.ship.points += $scope.ship.title.points if $scope.ship.title?
 

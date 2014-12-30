@@ -129,7 +129,7 @@
               <td>
                 <ul class="list-inline">
                   <li data-ng-repeat="action in ship.stats.actions">
-                    <i class="xwing-font xwing-font-small"
+                    <i class="fa xwing-font xwing-font-small fa-fw"
                        data-ng-class="{
                                             'xwing-font-boost': action === 'Boost',
                                             'xwing-font-focus': action === 'Focus',
@@ -180,22 +180,22 @@
           <div class="thumbnail">
             <maneuver-table ship="ship.stats"></maneuver-table>
             <div class="caption">
-              Maneuver Table
+              Available Maneuvers
             </div>
           </div>
 
           <table class="table">
             <tr data-ng-repeat="slot in ship.pilot.slots track by $index">
               <td>
-                <ui-select ng-model="ship.upgrades[$index]">
+                <ui-select data-ng-model="ship.upgrades[$index]">
                   <ui-select-match allow-clear placeholder="Select {{ slot }}"
-                                   popover="<p><small><em>{{ $select.selected.sources.join(', ') }}</em></small></p><p>{{ 'upgrades.' + $select.selected.name + '.INFO' | translate | parseIconPlaceholder }}</p>"
+                                   popover="<p><small><em>{{ $select.selected.sources.join(', ') }}</em></small></p><p><span class='label label-danger'>{{ $select.selected.attack }}</span> <small>at Range {{ $select.selected.range }}</small></p><p>{{ 'upgrades.' + $select.selected.name + '.INFO' | translate | parseIconPlaceholder }}</p>"
                                    popover-title="{{ $select.selected.name }}"
                                    popover-trigger="mouseenter"
                                    popover-placement="left"
-                                   popover-append-to-body="true"><a data-ng-click="clearSelection($event, $select)">&times;</a> {{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
+                                   popover-append-to-body="true"><a data-ng-click="clearSelection($event, $select)"><i class="fa fa-close"></i></a> {{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
                   <ui-select-choices repeat="upgrade in cards.upgradesById | filter:slot:upgrade.slot | filter:$select.search | filterByShip:ship | orderBy:'points'">
-                    <div popover="<p><small><em>{{ upgrade.sources.join(', ') }}</em></small></p><p> {{ 'upgrades.' + upgrade.name + '.INFO' | translate | parseIconPlaceholder }}</p>"
+                    <div popover="<p><small><em>{{ upgrade.sources.join(', ') }}</em></small></p><p><span class='label label-danger'>{{ upgrade.attack }}</span> <small>at Range {{ upgrade.range }}</small></p><p> {{ 'upgrades.' + upgrade.name + '.INFO' | translate | parseIconPlaceholder }}</p>"
                          popover-title="{{ upgrade.name }}"
                          popover-trigger="mouseenter"
                          popover-placement="left"
@@ -204,11 +204,27 @@
                 </ui-select>
               </td>
             </tr>
-            <tr data-ng-repeat="addon in getConferredAddons(ship.conferredAddon)">
+
+            <tr data-ng-repeat="addon in getConferredAddons(ship.conferredAddon) track by $index">
               <td>
-                {{ addon }}
+                <ui-select data-ng-model="ship.conferredAddon[$index].addon">
+                  <ui-select-match allow-clear placeholder="Select {{ addon }}"
+                                   popover="<p><small><em>{{ $select.selected.sources.join(', ') }}</em></small></p><p><span class='label label-danger'>{{ $select.selected.attack }}</span> <small>at Range {{ $select.selected.range }}</small></p><p>{{ 'upgrades.' + $select.selected.name + '.INFO' | translate | parseIconPlaceholder }}</p>"
+                                   popover-title="{{ $select.selected.name }}"
+                                   popover-trigger="mouseenter"
+                                   popover-placement="left"
+                                   popover-append-to-body="true"><a data-ng-click="clearSelection($event, $select)"><i class="fa fa-close"></i></a> {{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
+                  <ui-select-choices repeat="upgrade in cards.upgradesById | filter:addon:upgrade.slot | filter:$select.search | filterByShip:ship | orderBy:'points'">
+                    <div popover="<p><small><em>{{ upgrade.sources.join(', ') }}</em></small></p><p><span class='label label-danger'>{{ upgrade.attack }}</span> <small>at Range {{ upgrade.range }}</small></p><p> {{ 'upgrades.' + upgrade.name + '.INFO' | translate | parseIconPlaceholder }}</p>"
+                         popover-title="{{ upgrade.name }}"
+                         popover-trigger="mouseenter"
+                         popover-placement="left"
+                         popover-append-to-body="true"><span data-ng-bind-html="upgrade.name | highlight: $select.search"></span> ({{ upgrade.points }})</div>
+                  </ui-select-choices>
+                </ui-select>
               </td>
             </tr>
+
             <tr>
               <td>
                 <ui-select ng-model="ship.modifications[0]">
@@ -217,7 +233,7 @@
                                    popover-title="{{ $select.selected.name }}"
                                    popover-trigger="mouseenter"
                                    popover-placement="left"
-                                   popover-append-to-body="true"><a data-ng-click="clearSelection($event, $select)">&times;</a> {{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
+                                   popover-append-to-body="true"><a data-ng-click="clearSelection($event, $select)"><i class="fa fa-close"></i></a> {{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
                   <ui-select-choices repeat="mod in cards.modificationsById | filter:$select.search | filterByShip:ship | orderBy:'points'">
                     <div popover="<p><small><em>{{ mod.sources.join(', ') }}</em></small></p> {{ 'modifications.' + mod.name + '.INFO' | translate | parseIconPlaceholder }}"
                          popover-title="{{ mod.name }}"
@@ -235,7 +251,7 @@
                                    popover="{{ 'titles.' + $select.selected.name + '.INFO' | translate | parseIconPlaceholder }}"
                                    popover-trigger="mouseenter"
                                    popover-placement="left"
-                                   popover-append-to-body="true"><a data-ng-click="clearSelection($event, $select)">&times;</a> {{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
+                                   popover-append-to-body="true"><a data-ng-click="clearSelection($event, $select)"><i class="fa fa-close"></i></a> {{$select.selected.name}} ({{$select.selected.points}})</ui-select-match>
                   <ui-select-choices repeat="title in cards.titlesById | filter:$select.search | filterByShip:ship | orderBy:'points'">
                     <div popover="{{ 'titles.' + title.name + '.INFO' | translate | parseIconPlaceholder }}"
                          popover-trigger="mouseenter"
